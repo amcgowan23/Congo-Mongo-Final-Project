@@ -3,13 +3,14 @@ import { QueryForm } from './QueryForm';
 import { Articles } from './Articles';
 import { SavedQueries } from './SavedQueries';
 import { LoginForm } from './LoginForm';
+import { defaultQueries } from './defaultQueries';
 import { exampleQuery, exampleData } from './data';
 
 export function NewsReader() {
   const [query, setQuery] = useState(exampleQuery);
   const [data, setData] = useState(exampleData);
   const [queryFormObject, setQueryFormObject] = useState({ ...exampleQuery });
-  const [savedQueries, setSavedQueries] = useState([{ ...exampleQuery }]);
+  const [savedQueries, setSavedQueries] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [credentials, setCredentials] = useState({ user: "", password: "" });
 
@@ -18,12 +19,21 @@ export function NewsReader() {
   const urlUsersAuth = "http://localhost:4000/users/authenticate";
 
   useEffect(() => {
-    getNews(query);
-  }, [query]);
+    if (!currentUser) {
+      // No user logged in: show canned defaults
+      setSavedQueries(defaultQueries);
+    } else if (currentUser.user === "guest" || currentUser.user === "admin") {
+      // Guest or Admin logged in: start with empty list
+      setSavedQueries([]);
+    } else {
+      // Other logged in users: load saved queries from backend
+      getQueryList();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
-    getQueryList();
-  }, []);
+    getNews(query);
+  }, [query]);
 
   async function getQueryList() {
     try {
@@ -38,12 +48,12 @@ export function NewsReader() {
     }
   }
 
-  async function saveQueryList(savedQueries) {
+  async function saveQueryList(queriesToSave) {
     try {
       const response = await fetch(urlQueries, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(savedQueries),
+        body: JSON.stringify(queriesToSave),
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -68,16 +78,16 @@ export function NewsReader() {
       return;
     }
 
-    if (savedQueries.length >= 3 && currentUserMatches("guest")) {
+    // Guest user max query limit of 3, admin unlimited
+    if (currentUser.user === "guest" && savedQueries.length >= 3) {
       alert("Guest users cannot submit new queries once saved query count is 3 or greater!");
       return;
     }
 
     const newSavedQueries = [queryObject, ...savedQueries.filter(q => q.queryName !== queryObject.queryName)];
 
-    console.log(JSON.stringify(newSavedQueries));
-    saveQueryList(newSavedQueries);
     setSavedQueries(newSavedQueries);
+    saveQueryList(newSavedQueries);
     setQuery(queryObject);
   }
 
@@ -124,6 +134,7 @@ export function NewsReader() {
 
   async function login() {
     if (currentUser !== null) {
+      // logout
       setCurrentUser(null);
     } else {
       try {
@@ -169,7 +180,7 @@ export function NewsReader() {
               formObject={queryFormObject}
               setFormObject={setQueryFormObject}
               submitToParent={onFormSubmit}
-              currentUser={currentUser}  /* Pass currentUser here */
+              currentUser={currentUser}
               isAdmin={isAdmin()}
             />
           )}
