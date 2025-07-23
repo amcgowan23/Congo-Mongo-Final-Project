@@ -54,12 +54,10 @@ export function NewsReader() {
     }
   }
 
-  // Helper to check if current user matches a string
   function currentUserMatches(user) {
     return currentUser?.user === user;
   }
 
-  // Helper to check admin
   function isAdmin() {
     return currentUser?.user === "admin";
   }
@@ -75,7 +73,6 @@ export function NewsReader() {
       return;
     }
 
-    // Compose new saved queries without duplicates by queryName
     const newSavedQueries = [queryObject, ...savedQueries.filter(q => q.queryName !== queryObject.queryName)];
 
     console.log(JSON.stringify(newSavedQueries));
@@ -127,7 +124,6 @@ export function NewsReader() {
 
   async function login() {
     if (currentUser !== null) {
-      // logout
       setCurrentUser(null);
     } else {
       try {
@@ -138,7 +134,6 @@ export function NewsReader() {
         });
 
         if (response.status === 200) {
-          // Store only username, never store password in state
           setCurrentUser({ user: credentials.user });
           setCredentials({ user: "", password: "" });
         } else {
@@ -174,6 +169,7 @@ export function NewsReader() {
               formObject={queryFormObject}
               setFormObject={setQueryFormObject}
               submitToParent={onFormSubmit}
+              currentUser={currentUser}  /* Pass currentUser here */
               isAdmin={isAdmin()}
             />
           )}
