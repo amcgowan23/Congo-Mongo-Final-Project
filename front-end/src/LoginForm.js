@@ -1,62 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const urlUsersAuth = "http://localhost:4000/users/authenticate";
+export function LoginForm({ login, credentials, setCredentials, currentUser }) {
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-export function LoginForm({ urlQueries }) {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [credentials, setCredentials] = useState({ user: "", password: "" });
-  const [errorMsg, setErrorMsg] = useState("");
-
-  async function login(e) {
-    e.preventDefault(); // Prevent page reload
-    if (currentUser !== null) {
-      setCurrentUser(null);
-      setErrorMsg("");
-    } else {
-      try {
-        const response = await fetch(urlUsersAuth, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(credentials),
-        });
-        const result = await response.text();
-        console.log('Auth response:', response.status, result);
-
-        if (response.status === 200) {
-          setCurrentUser({ ...credentials });
-          setCredentials({ user: "", password: "" });
-          setErrorMsg("");
-        } else {
-          setErrorMsg(result);
-          setCurrentUser(null);
-        }
-      } catch (error) {
-        setErrorMsg("Network or server error");
-        console.error('Error authenticating user:', error);
-        setCurrentUser(null);
-      }
-    }
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login();
+  };
 
   return (
-    <form onSubmit={login}>
+    <form
+      onSubmit={handleSubmit}
+      className="login-form"
+    >
+      <label htmlFor="user">User:</label>
       <input
         type="text"
-        placeholder="Username"
+        id="user"
+        name="user"
         value={credentials.user}
-        onChange={e => setCredentials({ ...credentials, user: e.target.value })}
+        onChange={handleChange}
+        autoComplete="username"
+        disabled={!!currentUser}
       />
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
-        placeholder="Password"
+        id="password"
+        name="password"
         value={credentials.password}
-        onChange={e => setCredentials({ ...credentials, password: e.target.value })}
+        onChange={handleChange}
+        autoComplete="current-password"
+        disabled={!!currentUser}
       />
-      <button type="submit">
-        {currentUser ? "Logout" : "Login"}
-      </button>
-      {errorMsg && <div style={{color: "red"}}>{errorMsg}</div>}
-      {/* Add UI for saveQueryList as needed */}
+      <button type="submit">{currentUser ? 'Logout' : 'Login'}</button>
     </form>
   );
 }
