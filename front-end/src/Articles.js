@@ -44,7 +44,7 @@ export function Articles({ data, query }) {
     );
   }
 
-  const articleListHeight = '400px'; // fixed height for scroll container
+  const articleListHeight = '150px'; // fixed height for scroll container
 
   return (
     <div>
