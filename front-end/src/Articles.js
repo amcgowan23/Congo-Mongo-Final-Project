@@ -7,16 +7,14 @@ export function Articles({ data, query }) {
   const queryName = query.queryName || "N/A";
   const articleCount = data.totalResults || 0;
 
-  // Format query details into an unordered list
+  // Function to format and render query details (same as before)
   function renderQueryDetails() {
-    // Filter out empty or null properties to keep display clean
     const detailItems = Object.entries(query)
       .filter(([key, value]) => value !== undefined && value !== null && value !== "")
       .map(([key, value]) => {
-        // Optional: Format key to a more readable form, e.g. 'pageSize' to 'Page Size'
         const label = key
-          .replace(/([A-Z])/g, " $1") // add space before capital letters
-          .replace(/^./, (str) => str.toUpperCase()); // capitalize first letter
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase());
 
         return (
           <li key={key} style={{ marginBottom: '0.2rem' }}>
@@ -46,9 +44,11 @@ export function Articles({ data, query }) {
     );
   }
 
+  // Set max height to show ~5 items without scrolling (adjust height as needed)
+  const articleListMaxHeight = '300px';
+
   return (
     <div>
-      {/* Toggle button */}
       <button
         onClick={() => setShowDetails(!showDetails)}
         style={{
@@ -68,48 +68,61 @@ export function Articles({ data, query }) {
         {showDetails ? "Hide" : "Show"} Query Details
       </button>
 
-      {/* Conditionally show query details */}
       {showDetails && (
         <section id="query-details">
           {renderQueryDetails()}
         </section>
       )}
 
-      {/* Articles list */}
-      <ol style={{ paddingLeft: "1.25rem", marginTop: "0.5rem" }}>
-        {articles.length === 0 && <li>No articles found.</li>}
+      {/* Scrollable container with limited height */}
+      <div
+        style={{
+          maxHeight: articleListMaxHeight,
+          overflowY: "auto",
+          paddingRight: "0.5rem",
+          borderTop: "1px solid #ddd",
+          borderBottom: "1px solid #ddd",
+        }}
+      >
+        <ol style={{ paddingLeft: "1.25rem", marginTop: "0.5rem", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", fontSize: "0.85rem", lineHeight: "1.3" }}>
+          {articles.length === 0 && <li>No articles found.</li>}
 
-        {articles.map((item, idx) => {
-          if (!item) return <li key={idx}>No Item</li>;
-          if (!item.title) return <li key={idx}>No Title</li>;
-          if (item.title === "[Removed]")
-            return <li key={idx}>Was Removed</li>;
+          {articles.map((item, idx) => {
+            if (!item) return <li key={idx}>No Item</li>;
+            if (!item.title) return <li key={idx}>No Title</li>;
+            if (item.title === "[Removed]")
+              return <li key={idx}>Was Removed</li>;
 
-          const shortTitle =
-            item.title.length > 90
-              ? item.title.substring(0, 90) + "..."
-              : item.title;
+            // Show up to 150 characters of the title (adjust as needed)
+            const maxTitleLength = 150;
+            const shortTitle =
+              item.title.length > maxTitleLength
+                ? item.title.substring(0, maxTitleLength) + "..."
+                : item.title;
 
-          return (
-            <li key={idx} style={{ marginBottom: "0.5rem" }}>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  fontSize: "0.9rem",
-                  fontFamily: "Arial, sans-serif",
-                  textDecoration: "none",
-                  color: "#1a0dab",
-                  lineHeight: "1.4",
-                }}
-              >
-                {shortTitle}
-              </a>
-            </li>
-          );
-        })}
-      </ol>
+            return (
+              <li key={idx} style={{ marginBottom: "0.6rem" }}>
+                {/* Entire title as clickable link */}
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    fontSize: "0.9rem",
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    textDecoration: "none",
+                    color: "#1a0dab",
+                    lineHeight: "1.4",
+                  }}
+                  title={item.title} // full title on hover
+                >
+                  {shortTitle}
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
   );
 }
