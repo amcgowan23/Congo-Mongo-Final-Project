@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react';
-import { QueryForm } from './QueryForm';
-import { Articles } from './Articles';
-import { SavedQueries } from './SavedQueries';
-import { LoginForm } from './LoginForm';
-import { exampleQuery, exampleData } from './data';
+import { useState, useEffect } from "react";
+import { QueryForm } from "./QueryForm";
+import { Articles } from "./Articles";
+import { SavedQueries } from "./SavedQueries";
+import { LoginForm } from "./LoginForm";
+import { exampleQuery, exampleData } from "./data";
 
-export function NewsReader() {
+export function NewsReader({ currentUser, setCurrentUser }) {
   const [query, setQuery] = useState(exampleQuery);
   const [data, setData] = useState(exampleData);
   const [queryFormObject, setQueryFormObject] = useState({ ...exampleQuery });
   const [savedQueries, setSavedQueries] = useState([{ ...exampleQuery }]);
-  const [currentUser, setCurrentUser] = useState(null);
   const [credentials, setCredentials] = useState({ user: "", password: "" });
 
   const urlNews = "/news";
   const urlQueries = "/queries";
-  const urlUsersAuth = "http://localhost:4000/users/authenticate"; // <-- Make sure this URL is correct
+  const urlUsersAuth = "https://urldefense.com/v3/__http://localhost:4000/users/authenticate__;!!JJ-tOIoKdBzLSfV5jA!qATM33Cp2sWxF0masOkTm0FWiqRm-WxJO28l2JbG6ngnG9is32lfTT_dpMC_5jKaej_3xXnMPUqcpxJYmsGfRNii9UNJYQ$ ";
 
   useEffect(() => {
     getNews(query);
@@ -34,15 +33,15 @@ export function NewsReader() {
         setSavedQueries(data);
       }
     } catch (error) {
-      console.error('Error fetching saved queries:', error);
+      console.error("Error fetching saved queries:", error);
     }
   }
 
   async function saveQueryList(savedQueries) {
     try {
       const response = await fetch(urlQueries, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(savedQueries),
       });
       if (!response.ok) {
@@ -50,18 +49,15 @@ export function NewsReader() {
       }
       console.log("✅ savedQueries array has been persisted");
     } catch (error) {
-      console.error('Error saving queries:', error);
+      console.error("Error saving queries:", error);
     }
   }
 
-  // Simplified currentUserMatches helper
   function currentUserMatches(user) {
-    return currentUser?.user === user;
-  }
-
-  // Helper to check if admin user
-  function isAdmin() {
-    return currentUser?.user === "admin";
+    if (currentUser?.user === user) {
+      return true;
+    }
+    return false;
   }
 
   function onFormSubmit(queryObject) {
@@ -75,9 +71,7 @@ export function NewsReader() {
       return;
     }
 
-    // Compose new saved queries without duplicates by queryName
-    let newSavedQueries = [];
-    newSavedQueries.push(queryObject);
+    let newSavedQueries = [queryObject];
 
     for (let query of savedQueries) {
       if (query.queryName !== queryObject.queryName) {
@@ -100,8 +94,8 @@ export function NewsReader() {
     if (queryObject.q) {
       try {
         const response = await fetch(urlNews, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(queryObject),
         });
 
@@ -112,7 +106,7 @@ export function NewsReader() {
         const data = await response.json();
         setData(data);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        console.error("Error fetching news:", error);
       }
     } else {
       setData({});
@@ -121,26 +115,24 @@ export function NewsReader() {
 
   async function login() {
     if (currentUser !== null) {
-      // logout
       setCurrentUser(null);
     } else {
       try {
         const response = await fetch(urlUsersAuth, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(credentials),
         });
 
         if (response.status === 200) {
-          // Store only username, never store password in state
-          setCurrentUser({ user: credentials.user });
+          setCurrentUser({ ...credentials });
           setCredentials({ user: "", password: "" });
         } else {
           alert("Error during authentication! " + credentials.user);
           setCurrentUser(null);
         }
       } catch (error) {
-        console.error('Error authenticating user:', error);
+        console.error("Error authenticating user:", error);
         setCurrentUser(null);
       }
     }
@@ -157,17 +149,16 @@ export function NewsReader() {
 
       <section className="parent">
         <div className="box">
-          <span className='title'>Query Form</span>
+          <span className="title">Query Form</span>
           <QueryForm
             setFormObject={setQueryFormObject}
             formObject={queryFormObject}
             submitToParent={onFormSubmit}
-            isAdmin={isAdmin()}  /* Pass admin flag to enable extra fields */
           />
         </div>
 
         <div className="box">
-          <span className='title'>Saved Queries</span>
+          <span className="title">Saved Queries</span>
           <SavedQueries
             savedQueries={savedQueries}
             selectedQueryName={query.queryName}
@@ -176,7 +167,7 @@ export function NewsReader() {
         </div>
 
         <div className="box">
-          <span className='title'>Articles List</span>
+          <span className="title">Articles List</span>
           <Articles query={query} data={data} />
         </div>
       </section>
