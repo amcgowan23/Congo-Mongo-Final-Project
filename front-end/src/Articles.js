@@ -7,7 +7,7 @@ export function Articles({ data, query }) {
   const queryName = query.queryName || "N/A";
   const articleCount = data.totalResults || 0;
 
-  // Function to format and render query details (same as before)
+  // Function to format and render query details
   function renderQueryDetails() {
     const detailItems = Object.entries(query)
       .filter(([key, value]) => value !== undefined && value !== null && value !== "")
@@ -44,11 +44,11 @@ export function Articles({ data, query }) {
     );
   }
 
-  // Set max height to show ~5 items without scrolling (adjust height as needed)
-  const articleListMaxHeight = '300px';
+  const articleListHeight = '400px'; // fixed height for scroll container
 
   return (
     <div>
+      {/* Toggle button for query details */}
       <button
         onClick={() => setShowDetails(!showDetails)}
         style={{
@@ -68,23 +68,35 @@ export function Articles({ data, query }) {
         {showDetails ? "Hide" : "Show"} Query Details
       </button>
 
+      {/* Conditionally render query details */}
       {showDetails && (
         <section id="query-details">
           {renderQueryDetails()}
         </section>
       )}
 
-      {/* Scrollable container with limited height */}
+      {/* Scrollable container for articles list */}
       <div
         style={{
-          maxHeight: articleListMaxHeight,
+          height: articleListHeight,
+          width: "100%",
           overflowY: "auto",
+          overflowX: "hidden",
           paddingRight: "0.5rem",
           borderTop: "1px solid #ddd",
           borderBottom: "1px solid #ddd",
+          boxSizing: "border-box",
         }}
       >
-        <ol style={{ paddingLeft: "1.25rem", marginTop: "0.5rem", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", fontSize: "0.85rem", lineHeight: "1.3" }}>
+        <ol
+          style={{
+            paddingLeft: "1.25rem",
+            marginTop: "0.5rem",
+            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            fontSize: "0.85rem",
+            lineHeight: "1.3",
+          }}
+        >
           {articles.length === 0 && <li>No articles found.</li>}
 
           {articles.map((item, idx) => {
@@ -93,7 +105,6 @@ export function Articles({ data, query }) {
             if (item.title === "[Removed]")
               return <li key={idx}>Was Removed</li>;
 
-            // Show up to 150 characters of the title (adjust as needed)
             const maxTitleLength = 150;
             const shortTitle =
               item.title.length > maxTitleLength
@@ -102,7 +113,6 @@ export function Articles({ data, query }) {
 
             return (
               <li key={idx} style={{ marginBottom: "0.6rem" }}>
-                {/* Entire title as clickable link */}
                 <a
                   href={item.url}
                   target="_blank"
