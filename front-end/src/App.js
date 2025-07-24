@@ -20,7 +20,7 @@ function App() {
             userSelect: 'none',
             fontWeight: 'bold',
             fontSize: '2rem',
-            color: '#333',
+            color: '#001f4d',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',

@@ -44,29 +44,36 @@ export function Articles({ data, query }) {
     );
   }
 
-  const articleListHeight = '150px'; // fixed height for scroll container
-
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+        boxSizing: 'border-box',
+      }}
+    >
       {/* Toggle button for query details */}
-      <button
-        onClick={() => setShowDetails(!showDetails)}
-        style={{
-          marginBottom: "0.5rem",
-          fontSize: "0.85rem",
-          padding: "0.3rem 0.6rem",
-          cursor: "pointer",
-          backgroundColor: "#4a90e2",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          userSelect: "none",
-        }}
-        aria-expanded={showDetails}
-        aria-controls="query-details"
-      >
-        {showDetails ? "Hide" : "Show"} Query Details
-      </button>
+     <button
+  onClick={() => setShowDetails(!showDetails)}
+  style={{
+    marginBottom: "0.5rem",
+    fontSize: "0.75rem",       // smaller font size
+    padding: "0.2rem 0.5rem",  // smaller padding
+    cursor: "pointer",
+    backgroundColor: "#001f4d", // navy blue background
+    color: "#ffd200",           // torch yellow text for contrast
+    border: "none",
+    borderRadius: "4px",
+    userSelect: "none",
+    fontWeight: "bold",
+  }}
+  aria-expanded={showDetails}
+  aria-controls="query-details"
+>
+  {showDetails ? "Hide" : "Show"} Query Details
+</button>
 
       {/* Conditionally render query details */}
       {showDetails && (
@@ -78,8 +85,7 @@ export function Articles({ data, query }) {
       {/* Scrollable container for articles list */}
       <div
         style={{
-          height: articleListHeight,
-          width: "100%",
+          flexGrow: 1,
           overflowY: "auto",
           overflowX: "hidden",
           paddingRight: "0.5rem",
