@@ -1,3 +1,5 @@
+import React from "react";
+
 export function QueryForm({ formObject, setFormObject, submitToParent, currentUser }) {
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,13 +25,11 @@ export function QueryForm({ formObject, setFormObject, submitToParent, currentUs
     submitToParent(formObject);
   };
 
-  // Helper flags
   const isGuest = currentUser?.user === "guest";
-  const isAdmin = currentUser?.user === "admin";
 
   return (
-    <form onSubmit={onSubmitClick}>
-      <div>
+    <form onSubmit={onSubmitClick} className="query-form">
+      <div className="form-group">
         <label htmlFor="queryName">Query Name:</label>
         <input
           type="text"
@@ -38,10 +38,12 @@ export function QueryForm({ formObject, setFormObject, submitToParent, currentUs
           value={formObject.queryName}
           onChange={handleChange}
           required
+          className="form-input"
+          placeholder="Enter query name"
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="q">Query Text:</label>
         <input
           type="text"
@@ -50,19 +52,21 @@ export function QueryForm({ formObject, setFormObject, submitToParent, currentUs
           value={formObject.q}
           onChange={handleChange}
           required
+          className="form-input"
+          placeholder="Enter search text"
         />
       </div>
 
-      {/* Show language and pageSize only if NOT guest */}
       {!isGuest && (
         <>
-          <div>
+          <div className="form-group">
             <label htmlFor="language">Language:</label>
             <select
               id="language"
               name="language"
               value={formObject.language}
               onChange={handleChange}
+              className="form-select"
             >
               <option value="">All</option>
               <option value="en">English</option>
@@ -73,7 +77,7 @@ export function QueryForm({ formObject, setFormObject, submitToParent, currentUs
             </select>
           </div>
 
-          <div>
+          <div className="form-group">
             <label htmlFor="pageSize">Page Size:</label>
             <input
               type="number"
@@ -83,12 +87,15 @@ export function QueryForm({ formObject, setFormObject, submitToParent, currentUs
               max={100}
               value={formObject.pageSize}
               onChange={handleChange}
+              className="form-input"
             />
           </div>
         </>
       )}
 
-      <button type="submit">Submit</button>
+      <button type="submit" className="btn-submit">
+        Submit
+      </button>
     </form>
   );
 }

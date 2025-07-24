@@ -2,7 +2,7 @@ import express from "express";
 import fetch from "node-fetch";
 const router = express.Router();
 
-const baseUrl = "https://newsapi.org/v2/top-headlines";
+const baseUrl = "https://newsapi.org/v2/everything";
 
 const apiKey = process.env.API_KEY;
 if (!apiKey) {
