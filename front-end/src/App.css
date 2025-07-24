@@ -1,15 +1,18 @@
-/* Reset some default spacing and box sizing */
+/* Reset default spacing and box sizing */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+/* Base styles */
+html,
 body {
-  font-family: Arial, sans-serif;
+  height: 100%;
   margin: 0;
   padding: 0;
   background: #f9f9f9;
+  font-family: Arial, sans-serif;
   color: #333;
   line-height: 1.5;
   font-size: 16px;
@@ -17,13 +20,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Main container centers content */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* HEADER: Login Form and Status */
+/* Header: Title, Login Form, and User Status */
 header {
   display: flex;
   align-items: center;
@@ -34,19 +39,21 @@ header {
   border-radius: 6px;
   background-color: #fafafa;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Login form inside header */
 header form {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: nowrap;
   flex-grow: 1;
-  min-width: 0; /* for flexbox shrinking */
+  min-width: 0;
+  max-width: 600px; /* Limit form width */
 }
 
-/* Labels */
 header label {
   font-weight: bold;
   margin-right: 0.25rem;
@@ -54,7 +61,6 @@ header label {
   flex-shrink: 0;
 }
 
-/* Inputs */
 header input[type="text"],
 header input[type="password"] {
   padding: 0.3rem 0.5rem;
@@ -73,7 +79,6 @@ header input[type="password"]:focus {
   outline: none;
 }
 
-/* Button */
 header button {
   padding: 0.5rem 1rem;
   border: none;
@@ -93,47 +98,53 @@ header button:focus {
   outline: none;
 }
 
-/* User status */
 .status {
   margin-left: auto;
   font-style: italic;
   font-weight: bold;
   white-space: nowrap;
   flex-shrink: 0;
+  min-width: 140px;
+  text-align: right;
 }
 
-/* MAIN CONTENT: Layout for Query Form, Saved Queries, and Articles */
-
+/* Main Content Area Layout */
 .main-content {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* Sidebar styling for Query Form and Saved Queries */
+/* Sidebar Styles for Query Form and Saved Queries */
 .sidebar {
   flex: 1 1 300px; /* grow, shrink, basis */
   background: #fff;
   padding: 1rem;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   min-width: 280px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Articles wider section */
+.sidebar > * + * {
+  margin-top: 1rem; /* vertical spacing between children */
+}
+
+/* Articles Section Styles */
 .articles {
   flex: 2 1 600px;
   background: #fff;
   padding: 1rem;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   min-width: 320px;
   overflow-wrap: break-word;
   box-sizing: border-box;
 }
 
-/* Section titles */
+/* Section Titles */
 .title {
   font-weight: bold;
   margin-bottom: 0.5rem;
@@ -143,14 +154,14 @@ header button:focus {
   user-select: none;
 }
 
-/* Form inputs and selects inside sidebars */
+/* Form Inputs and Selects */
 input[type="text"],
 input[type="password"],
 input[type="number"],
 select {
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.8rem;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
@@ -166,9 +177,9 @@ select:focus {
   outline: none;
 }
 
-/* Buttons inside sidebars */
+/* Buttons */
 button {
-  padding: 0.6rem 1.2rem;
+  padding: 0.75rem 1.25rem;
   background-color: #4a90e2;
   color: white;
   border: none;
@@ -176,6 +187,8 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: 1rem;
+  user-select: none;
 }
 
 button:hover,
@@ -184,23 +197,23 @@ button:focus {
   outline: none;
 }
 
-/* Responsive Breakpoints */
+/* Responsive Design */
 
 @media (max-width: 1024px) {
   .container {
     padding: 0.5rem;
   }
-  
+
   header input[type="text"],
   header input[type="password"] {
     width: 120px;
   }
-  
+
   .sidebar {
     flex: 1 1 45%;
     min-width: 220px;
   }
-  
+
   .articles {
     flex: 1 1 100%;
     min-width: auto;
@@ -216,6 +229,8 @@ button:focus {
 
   .status {
     margin-left: 0;
+    text-align: left;
+    width: 100%;
   }
 
   .main-content {
@@ -233,14 +248,14 @@ button:focus {
   header form {
     flex-wrap: wrap;
   }
-  
+
   header input[type="text"],
   header input[type="password"],
   button {
     width: 100%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
-  
+
   button {
     padding: 0.75rem;
   }
