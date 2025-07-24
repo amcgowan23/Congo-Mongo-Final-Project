@@ -34,13 +34,13 @@ code {
   flex-direction: row;
 }
 
-.box{
+/* .box{
   border:1px solid black;
   flex:1;
   padding: 5px;
   max-width: 300px;
   font-size: small;
-}
+} */
 
 .box span{
   padding: 3px;
