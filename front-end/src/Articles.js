@@ -62,7 +62,7 @@ export function Articles({ data, query }) {
     fontSize: "0.75rem",       // smaller font size
     padding: "0.2rem 0.5rem",  // smaller padding
     cursor: "pointer",
-    backgroundColor: "#001f4d", // navy blue background
+    backgroundColor: "#808080", // navy blue background
     color: "#ffd200",           // torch yellow text for contrast
     border: "none",
     borderRadius: "4px",
