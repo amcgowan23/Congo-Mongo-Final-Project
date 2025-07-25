@@ -181,7 +181,7 @@ export function NewsReader() {
           alignItems: 'center',
           gap: '1rem',
           padding: '1rem 0',
-          borderBottom: '2px solid #4a90e2',
+          borderBottom: '2px solid grey',
         }}
       >
         {/* <h1
@@ -204,6 +204,7 @@ export function NewsReader() {
             // marginLeft: 'auto'
             display: 'flex',
             alignItems: 'center',
+            padding: '10px',
             gap: '1rem',
           }}
         >

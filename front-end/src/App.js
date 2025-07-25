@@ -10,7 +10,7 @@ function App() {
           alignItems: 'center',
           gap: '0.75rem',
           padding: '1rem 0',
-          borderBottom: '2px solid #4a90e2',
+          borderBottom: '2px solid grey',
         }}
       >
         {/* Wrap title text and image together for better alignment */}

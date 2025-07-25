@@ -45,7 +45,7 @@ header {
 }
 .title {
   color: #001f4d; /* Navy Blue titles */
-  border-bottom: 2px solid #001f4d;
+  border-bottom: 2px solid grey;
 }
 
 header form {
@@ -86,7 +86,7 @@ header input[type="password"]:focus {
 header button {
   padding: 0.5rem 1rem;
   border: none;
-  background-color: #4a90e2;
+  background-color: grey;
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -218,7 +218,7 @@ label {
   font-weight: bold;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
-  border-bottom: 2px solid #4a90e2;
+  border-bottom: 2px solid grey;
   padding-bottom: 0.25rem;
   user-select: none;
 }
